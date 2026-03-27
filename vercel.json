@@ -1,5 +1,5 @@
 {
-  "buildCommand": null,
+  "buildCommand": "npm install && npm run build:diary",
   "outputDirectory": ".",
   "framework": null,
   "rewrites": [
