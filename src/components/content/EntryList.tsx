@@ -47,10 +47,16 @@ export function EntryList({ entries, type, title, subtitle }: EntryListProps) {
             />
             BACK TO FRI
           </Link>
-          <h1 className="font-vt323 text-3xl sm:text-4xl tracking-wider text-pink-200">
+          <h1
+            className="font-vt323 text-3xl sm:text-4xl tracking-wider"
+            style={{ color: 'var(--text-heading)' }}
+          >
             {title}
           </h1>
-          <p className="mt-2 text-sm text-gray-400 max-w-prose leading-relaxed">
+          <p
+            className="mt-2 text-sm max-w-prose leading-relaxed"
+            style={{ color: 'var(--text-muted)' }}
+          >
             {subtitle}
           </p>
           <div className="mt-4 h-px bg-neon-pink/25" />
@@ -74,7 +80,10 @@ export function EntryList({ entries, type, title, subtitle }: EntryListProps) {
                   className="group glass-panel flex flex-col overflow-hidden hover:border-neon-pink/50 transition-all"
                 >
                   {entry.cover && (
-                    <div className="h-36 overflow-hidden border-b border-pink-500/15">
+                    <div
+                      className="h-36 overflow-hidden border-b"
+                      style={{ borderColor: 'var(--border-cover)' }}
+                    >
                       <CoverImage src={entry.cover} className="group-hover:scale-105 transition-transform duration-500" />
                     </div>
                   )}
@@ -83,11 +92,17 @@ export function EntryList({ entries, type, title, subtitle }: EntryListProps) {
                       <time className="font-vt323 text-[11px] tracking-widest text-neon-coral/80">
                         {entry.date}
                       </time>
-                      <h2 className="mt-1.5 font-vt323 text-lg tracking-wide text-pink-200 group-hover:text-white transition-colors leading-tight">
+                      <h2
+                        className="mt-1.5 font-vt323 text-lg tracking-wide transition-colors leading-tight"
+                        style={{ color: 'var(--text-card-title)' }}
+                      >
                         {entry.title}
                       </h2>
                       {entry.summary && (
-                        <p className="mt-1.5 text-xs text-gray-400 line-clamp-2 leading-relaxed">
+                        <p
+                          className="mt-1.5 text-xs line-clamp-2 leading-relaxed"
+                          style={{ color: 'var(--text-muted)' }}
+                        >
                           {entry.summary}
                         </p>
                       )}
@@ -118,7 +133,10 @@ export function EntryList({ entries, type, title, subtitle }: EntryListProps) {
                 ARCHIVE
               </span>
               <div className="flex-1 h-px bg-neon-pink/15" />
-              <span className="font-tech text-[10px] text-gray-500">
+              <span
+                className="font-tech text-[10px]"
+                style={{ color: 'var(--text-dim)' }}
+              >
                 {entries.length} entries
               </span>
             </div>
@@ -128,22 +146,34 @@ export function EntryList({ entries, type, title, subtitle }: EntryListProps) {
                 <Link
                   key={entry.slug}
                   href={`/${type}/${entry.slug}`}
-                  className="group flex items-center gap-4 py-2.5 px-3 transition-all hover:bg-glass-bg border border-transparent hover:border-glass-border"
+                  className="group flex items-center gap-4 py-2.5 px-3 border border-transparent transition-all"
                 >
                   {entry.cover ? (
-                    <div className="w-14 h-10 shrink-0 overflow-hidden border border-pink-500/15">
+                    <div
+                      className="w-14 h-10 shrink-0 overflow-hidden border"
+                      style={{ borderColor: 'var(--border-cover)' }}
+                    >
                       <CoverImage src={entry.cover} />
                     </div>
                   ) : (
-                    <div className="w-14 h-10 shrink-0 bg-pink-950/20 border border-pink-500/10" />
+                    <div
+                      className="w-14 h-10 shrink-0 border"
+                      style={{ background: 'var(--bg-placeholder)', borderColor: 'var(--border-subtle)' }}
+                    />
                   )}
                   <time className="font-vt323 text-[11px] tracking-widest text-neon-coral/50 shrink-0 w-20">
                     {entry.date}
                   </time>
-                  <h3 className="font-vt323 text-sm tracking-wide text-pink-200/80 group-hover:text-white transition-colors flex-1 truncate">
+                  <h3
+                    className="font-vt323 text-sm tracking-wide transition-colors flex-1 truncate"
+                    style={{ color: 'var(--text-card-title)' }}
+                  >
                     {entry.title}
                   </h3>
-                  <span className="font-tech text-[9px] text-gray-600 shrink-0">
+                  <span
+                    className="font-tech text-[9px] shrink-0"
+                    style={{ color: 'var(--text-dim)' }}
+                  >
                     #{entries.length - 3 - i}
                   </span>
                 </Link>
@@ -154,14 +184,20 @@ export function EntryList({ entries, type, title, subtitle }: EntryListProps) {
 
         {entries.length === 0 && (
           <div className="glass-panel p-10 text-center">
-            <p className="font-vt323 text-sm text-gray-500 tracking-widest">
+            <p
+              className="font-vt323 text-sm tracking-widest"
+              style={{ color: 'var(--text-dim)' }}
+            >
               NO ENTRIES YET — AWAITING FIRST DISPATCH.
             </p>
           </div>
         )}
 
         <footer className="mt-12 pt-6 border-t border-neon-pink/10">
-          <p className="text-[10px] text-gray-600 font-tech">
+          <p
+            className="text-[10px] font-tech"
+            style={{ color: 'var(--text-dim)' }}
+          >
             {entries.length} entries · powered by FRI
           </p>
         </footer>

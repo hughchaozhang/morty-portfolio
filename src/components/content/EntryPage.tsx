@@ -25,7 +25,7 @@ interface EntryPageProps {
 
 export function EntryPage({ entry, type, backHref }: EntryPageProps) {
   return (
-    <div className="min-h-screen bg-bg-dark">
+    <div className="min-h-screen" style={{ background: 'var(--bg-body)' }}>
       <article className="mx-auto max-w-2xl px-6 py-16">
         {/* -- nav --------------------------------------------------- */}
         <Link
@@ -37,7 +37,7 @@ export function EntryPage({ entry, type, backHref }: EntryPageProps) {
 
         {/* -- cover ------------------------------------------------- */}
         {entry.cover && (
-          <div className="mb-8 overflow-hidden border border-pink-500/15 max-h-72">
+          <div className="mb-8 overflow-hidden border max-h-72" style={{ borderColor: 'var(--border-cover)' }}>
             <CoverImage src={entry.cover} className="w-full" />
           </div>
         )}

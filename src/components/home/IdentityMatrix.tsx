@@ -43,7 +43,10 @@ export function IdentityMatrix({ diaryCount, weeklyCount, lastEntryAge }: Identi
   ];
   return (
     <TechBorder className="p-5">
-      <h2 className="text-xs font-vt323 text-pink-400 mb-4 flex items-center gap-2 tracking-widest">
+      <h2
+        className="text-xs font-vt323 mb-4 flex items-center gap-2 tracking-widest"
+        style={{ color: 'var(--text-panel-title)' }}
+      >
         <img
           src="https://unpkg.com/pixelarticons@1.8.1/svg/server.svg"
           className="pa-icon w-4 h-4 inline-block"
@@ -59,12 +62,13 @@ export function IdentityMatrix({ diaryCount, weeklyCount, lastEntryAge }: Identi
             key={label}
             className={`flex justify-between items-center text-sm${
               i < specs.length - 1
-                ? " border-b border-pink-500/25 pb-3 pt-0.5"
+                ? " border-b pb-3 pt-0.5"
                 : " pb-3 pt-0.5"
             }`}
+            style={i < specs.length - 1 ? { borderColor: 'var(--border-divider)' } : undefined}
           >
-            <span className="text-gray-400">{label}</span>
-            <span className="font-bold font-vt323 text-pink-300">{value}</span>
+            <span style={{ color: 'var(--text-muted)' }}>{label}</span>
+            <span className="font-bold font-vt323" style={{ color: 'var(--text-value)' }}>{value}</span>
           </div>
         ))}
       </div>

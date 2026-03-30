@@ -20,7 +20,7 @@ export function CoverImage({
 
   if (failed) {
     return (
-      <div className={`flex items-center justify-center bg-pink-950/20 text-[10px] font-vt323 text-gray-500 tracking-wider ${className}`}>
+      <div className={`flex items-center justify-center text-[10px] font-vt323 tracking-wider ${className}`} style={{ background: 'var(--bg-placeholder)', color: 'var(--text-dim)' }}>
         IMAGE UNAVAILABLE
       </div>
     );

@@ -45,41 +45,79 @@
  * -------------------------------------------------------------------------- */
 
 :root {
+  /* ---- primitives ---- */
   --neon-pink: #ec4899;
   --neon-coral: #fb923c;
   --neon-dim: #4d2d3d;
-  --bg-dark: #050510;
   --glass-border: rgba(236, 72, 153, 0.35);
   --glass-bg: rgba(15, 5, 15, 0.75);
 
-  /* semantic tokens — consumed everywhere */
+  /* ---- backgrounds ---- */
   --bg-body: #050510;
   --bg-grid-line: rgba(236, 72, 153, 0.03);
   --bg-panel: rgba(15, 5, 15, 0.75);
   --bg-panel-hover-border: rgba(236, 72, 153, 0.5);
   --bg-surface: rgba(236, 72, 153, 0.05);
+  --bg-surface-hover: rgba(236, 72, 153, 0.08);
+  --bg-surface-alt: rgba(236, 72, 153, 0.08);
   --bg-input: rgba(8, 8, 24, 0.6);
   --bg-bar-area: rgba(0, 0, 0, 0.2);
+  --bg-diamond: #f472b6;
+  --bg-diamond-orange: #fdba74;
+  --bg-placeholder: rgba(236, 72, 153, 0.1);
+  --bg-tab-active: rgba(236, 72, 153, 0.15);
+  --bg-hover-row: rgba(15, 5, 15, 0.75);
+  --border-hover-row: rgba(236, 72, 153, 0.35);
 
+  /* ---- text ---- */
   --text-primary: #fce7f3;
   --text-secondary: #d1d5db;
   --text-muted: #9ca3af;
   --text-dim: #6b7280;
   --text-accent: #ec4899;
   --text-accent-soft: rgba(236, 72, 153, 0.7);
+  --text-accent-muted: rgba(236, 72, 153, 0.4);
   --text-heading: #fda4af;
   --text-value: #f9a8d4;
+  --text-panel-title: #f472b6;
+  --text-card-title: #fda4af;
+  --text-card-body: #9ca3af;
+  --text-card-highlight: rgba(236, 72, 153, 0.8);
+  --text-orange-title: #fed7aa;
+  --text-orange-body: rgba(254, 215, 170, 0.8);
+  --text-link: #831843;
+  --text-link-hover: #ffffff;
+  --text-link-easter: rgba(131, 24, 67, 0.5);
+  --text-link-easter-hover: rgba(236, 72, 153, 0.8);
+  --text-status: #4ade80;
+  --text-status-ready: #facc15;
+  --text-tab-active: #f9a8d4;
+  --text-tab-inactive: #6b7280;
+  --text-tab-inactive-hover: #d1d5db;
+  --text-input: #fce7f3;
+  --text-input-placeholder: rgba(136, 19, 55, 0.4);
 
+  /* ---- borders ---- */
   --border-accent: rgba(236, 72, 153, 0.25);
   --border-subtle: rgba(236, 72, 153, 0.10);
+  --border-tab-active: rgba(236, 72, 153, 0.3);
+  --border-divider: rgba(236, 72, 153, 0.25);
+  --border-cover: rgba(236, 72, 153, 0.15);
+  --border-video: #f472b6;
+  --border-orange: rgba(253, 186, 116, 0.7);
+  --border-crosshair: rgba(236, 72, 153, 0.15);
 
+  /* ---- header ---- */
   --header-bg: rgba(5, 5, 16, 0.9);
+  --header-border: rgba(236, 72, 153, 0.25);
   --gauge-track: #4a044e;
   --gauge-fill: #f472b6;
 
+  /* ---- scanline ---- */
   --scanline-color: rgba(236, 72, 153, 0.03);
   --scanner-color: rgba(251, 146, 60, 0.08);
 
+  /* ---- terminal ---- */
   --terminal-text: #a8b2c1;
   --terminal-output: #c9d1d9;
   --terminal-meta: #6e7681;
@@ -87,19 +125,33 @@
   --terminal-fri: #fb923c;
   --terminal-cursor-bg: #fb923c;
 
+  /* ---- scrollbar ---- */
   --scroll-track: rgba(0, 0, 0, 0.3);
   --scroll-thumb: #ec4899;
 
+  /* ---- icons ---- */
   --icon-filter: brightness(0) saturate(100%) invert(55%) sepia(90%) saturate(1200%) hue-rotate(310deg);
   --icon-filter-white: brightness(0) invert(1);
 
+  /* ---- shimmer ---- */
   --shimmer-base: rgba(236, 72, 153, 0.4);
   --shimmer-peak: rgba(255, 200, 230, 1);
 
+  /* ---- arc reactor rings ---- */
   --ring-3: rgba(236, 72, 153, 0.4);
   --ring-4: rgba(236, 72, 153, 0.3);
   --ring-5: rgba(236, 72, 153, 0.2);
+  --crosshair-via: rgba(236, 72, 153, 0.2);
 
+  /* ---- bar chart (diagnostics) ---- */
+  --bar-active: rgba(236, 72, 153, 0.7);
+  --bar-inactive: rgba(236, 72, 153, 0.1);
+  --bar-hovered: rgba(236, 72, 153, 0.95);
+  --bar-dimmed: rgba(236, 72, 153, 0.3);
+  --bar-dimmed-inactive: rgba(236, 72, 153, 0.05);
+  --bar-label: #be185d;
+
+  /* ---- diary content ---- */
   --diary-h1: #fda4af;
   --diary-h2: #fdba74;
   --diary-h3: #fda4af;
@@ -114,19 +166,19 @@
   --diary-link-underline: rgba(249, 168, 212, 0.4);
   --diary-hr: rgba(236, 72, 153, 0.2);
 
+  /* ---- matrix rain ---- */
   --matrix-text: rgba(236, 72, 153, 0.10);
   --matrix-bright: rgba(236, 72, 153, 0.19);
 }
 
 /* --------------------------------------------------------------------------
- * LIGHT THEME — white bg, pink accents preserved
+ * LIGHT THEME — single source of truth, no Tailwind class overrides
  * -------------------------------------------------------------------------- */
 
 [data-theme="light"] {
   --neon-pink: #db2777;
   --neon-coral: #ea580c;
   --neon-dim: #fce7f3;
-  --bg-dark: #fafafa;
   --glass-border: rgba(219, 39, 119, 0.2);
   --glass-bg: rgba(255, 255, 255, 0.85);
 
@@ -135,8 +187,16 @@
   --bg-panel: rgba(255, 255, 255, 0.85);
   --bg-panel-hover-border: rgba(219, 39, 119, 0.4);
   --bg-surface: rgba(219, 39, 119, 0.06);
+  --bg-surface-hover: rgba(219, 39, 119, 0.1);
+  --bg-surface-alt: rgba(194, 65, 12, 0.06);
   --bg-input: rgba(255, 255, 255, 0.8);
   --bg-bar-area: rgba(219, 39, 119, 0.05);
+  --bg-diamond: #ec4899;
+  --bg-diamond-orange: #ea580c;
+  --bg-placeholder: rgba(219, 39, 119, 0.06);
+  --bg-tab-active: rgba(219, 39, 119, 0.1);
+  --bg-hover-row: rgba(219, 39, 119, 0.06);
+  --border-hover-row: rgba(219, 39, 119, 0.2);
 
   --text-primary: #1f2937;
   --text-secondary: #374151;
@@ -144,13 +204,38 @@
   --text-dim: #9ca3af;
   --text-accent: #db2777;
   --text-accent-soft: rgba(219, 39, 119, 0.6);
+  --text-accent-muted: rgba(219, 39, 119, 0.3);
   --text-heading: #be185d;
   --text-value: #db2777;
+  --text-panel-title: #be185d;
+  --text-card-title: #9d174d;
+  --text-card-body: #6b7280;
+  --text-card-highlight: rgba(219, 39, 119, 0.8);
+  --text-orange-title: #c2410c;
+  --text-orange-body: rgba(194, 65, 12, 0.8);
+  --text-link: #9d174d;
+  --text-link-hover: #db2777;
+  --text-link-easter: rgba(157, 23, 77, 0.5);
+  --text-link-easter-hover: rgba(219, 39, 119, 0.8);
+  --text-status: #059669;
+  --text-status-ready: #ca8a04;
+  --text-tab-active: #db2777;
+  --text-tab-inactive: #6b7280;
+  --text-tab-inactive-hover: #374151;
+  --text-input: #1f2937;
+  --text-input-placeholder: rgba(131, 24, 67, 0.3);
 
   --border-accent: rgba(219, 39, 119, 0.2);
   --border-subtle: rgba(219, 39, 119, 0.08);
+  --border-tab-active: rgba(219, 39, 119, 0.2);
+  --border-divider: rgba(219, 39, 119, 0.15);
+  --border-cover: rgba(219, 39, 119, 0.1);
+  --border-video: #db2777;
+  --border-orange: rgba(194, 65, 12, 0.3);
+  --border-crosshair: rgba(219, 39, 119, 0.1);
 
   --header-bg: rgba(255, 255, 255, 0.92);
+  --header-border: rgba(219, 39, 119, 0.15);
   --gauge-track: #fce7f3;
   --gauge-fill: #ec4899;
 
@@ -176,6 +261,14 @@
   --ring-3: rgba(219, 39, 119, 0.2);
   --ring-4: rgba(219, 39, 119, 0.15);
   --ring-5: rgba(219, 39, 119, 0.1);
+  --crosshair-via: rgba(219, 39, 119, 0.1);
+
+  --bar-active: rgba(219, 39, 119, 0.6);
+  --bar-inactive: rgba(219, 39, 119, 0.08);
+  --bar-hovered: rgba(219, 39, 119, 0.9);
+  --bar-dimmed: rgba(219, 39, 119, 0.2);
+  --bar-dimmed-inactive: rgba(219, 39, 119, 0.03);
+  --bar-label: #9d174d;
 
   --diary-h1: #be185d;
   --diary-h2: #c2410c;
@@ -193,81 +286,6 @@
 
   --matrix-text: rgba(219, 39, 119, 0.08);
   --matrix-bright: rgba(219, 39, 119, 0.18);
-}
-
-/* ---- light mode: override hardcoded Tailwind color classes ---- */
-
-[data-theme="light"] {
-  /* text colors */
-  & .text-pink-100 { color: #1f2937; }
-  & .text-pink-200 { color: #9d174d; }
-  & .text-pink-200\/80 { color: rgba(157, 23, 77, 0.8); }
-  & .text-pink-300 { color: #db2777; }
-  & .text-pink-300\/70 { color: rgba(219, 39, 119, 0.7); }
-  & .text-pink-300\/80 { color: rgba(219, 39, 119, 0.8); }
-  & .text-pink-400 { color: #be185d; }
-  & .text-pink-400\/80 { color: rgba(190, 24, 93, 0.8); }
-  & .text-pink-500 { color: #db2777; }
-  & .text-pink-500\/50 { color: rgba(219, 39, 119, 0.5); }
-  & .text-pink-500\/70 { color: rgba(219, 39, 119, 0.7); }
-  & .text-pink-600 { color: #be185d; }
-  & .text-pink-700 { color: #9d174d; }
-  & .text-pink-800\/50 { color: rgba(157, 23, 77, 0.5); }
-  & .text-pink-900\/40 { color: rgba(131, 24, 67, 0.4); }
-  & .text-gray-300 { color: #374151; }
-  & .text-gray-300\/80 { color: rgba(55, 65, 81, 0.8); }
-  & .text-gray-400 { color: #6b7280; }
-  & .text-gray-500 { color: #6b7280; }
-  & .text-gray-600 { color: #9ca3af; }
-  & .text-orange-100 { color: #c2410c; }
-  & .text-orange-100\/80 { color: rgba(194, 65, 12, 0.8); }
-  & .text-white { color: #1f2937; }
-
-  /* background colors */
-  & .bg-pink-400 { background-color: #ec4899; }
-  & .bg-pink-500\/10 { background-color: rgba(219, 39, 119, 0.08); }
-  & .bg-pink-500\/15 { background-color: rgba(219, 39, 119, 0.1); }
-  & .bg-pink-500\/70 { background-color: rgba(219, 39, 119, 0.6); }
-  & .bg-pink-950 { background-color: #fce7f3; }
-  & .bg-pink-950\/10 { background-color: rgba(219, 39, 119, 0.06); }
-  & .bg-pink-950\/20 { background-color: rgba(219, 39, 119, 0.06); }
-  & .bg-orange-500\/10 { background-color: rgba(194, 65, 12, 0.06); }
-  & .bg-black\/20 { background-color: rgba(219, 39, 119, 0.05); }
-  & .bg-\[\#080818\]\/60 { background-color: rgba(255, 255, 255, 0.8); }
-  & .bg-\[\#050510\]\/90 { background-color: rgba(255, 255, 255, 0.92); }
-
-  /* border colors */
-  & .border-pink-400 { border-color: #db2777; }
-  & .border-pink-400\/70 { border-color: rgba(219, 39, 119, 0.5); }
-  & .border-pink-500\/10 { border-color: rgba(219, 39, 119, 0.08); }
-  & .border-pink-500\/15 { border-color: rgba(219, 39, 119, 0.1); }
-  & .border-pink-500\/25 { border-color: rgba(219, 39, 119, 0.15); }
-  & .border-pink-500\/30 { border-color: rgba(219, 39, 119, 0.2); }
-  & .border-orange-300\/70 { border-color: rgba(194, 65, 12, 0.3); }
-  & .border-\[\#ec4899\]\/25 { border-color: rgba(219, 39, 119, 0.15); }
-
-  /* hover states */
-  & .hover\:text-white:hover { color: #db2777; }
-  & .hover\:text-pink-300:hover { color: #db2777; }
-  & .hover\:text-pink-400\/80:hover { color: rgba(190, 24, 93, 0.8); }
-  & .hover\:text-gray-300:hover { color: #374151; }
-  & .hover\:bg-pink-500\/15:hover { background-color: rgba(219, 39, 119, 0.1); }
-  & .hover\:bg-orange-500\/15:hover { background-color: rgba(194, 65, 12, 0.08); }
-  & .hover\:bg-pink-400:hover { background-color: #ec4899; }
-
-  /* arc reactor video border */
-  & .border-pink-400 { border-color: #db2777; }
-
-  /* crosshair grid */
-  & .border-pink-500\/15 { border-color: rgba(219, 39, 119, 0.1); }
-
-  /* placeholder */
-  & .placeholder-pink-900\/40::placeholder { color: rgba(131, 24, 67, 0.3); }
-
-  /* @theme color overrides — these are compiled-in so we override the utilities directly */
-  & .hover\:bg-glass-bg:hover { background-color: rgba(219, 39, 119, 0.06) !important; }
-  & .hover\:border-glass-border:hover { border-color: rgba(219, 39, 119, 0.2) !important; }
-  & .bg-bg-dark { background-color: #fafafa !important; }
 }
 
 /* --------------------------------------------------------------------------
@@ -378,6 +396,10 @@ body {
 
 #session-panel.expanded .session-chevron {
   transform: rotate(180deg);
+}
+
+#session-panel input::placeholder {
+  color: var(--text-input-placeholder);
 }
 
 /* --------------------------------------------------------------------------

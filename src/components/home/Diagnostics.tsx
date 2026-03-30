@@ -47,10 +47,10 @@ export function Diagnostics({
   const [hovered, setHovered] = useState<number | null>(null);
 
   const services = [
-    { name: "DIARY", status: `${diaryCount} entries`, color: "text-green-400" },
-    { name: "WEEKLY", status: `${weeklyCount} entries`, color: "text-green-400" },
-    { name: "LINK_PREVIEW", status: `CACHED (${cachedUrls})`, color: "text-green-400" },
-    { name: "DEPLOY", status: "VERCEL", color: "text-green-400" },
+    { name: "DIARY", status: `${diaryCount} entries` },
+    { name: "WEEKLY", status: `${weeklyCount} entries` },
+    { name: "LINK_PREVIEW", status: `CACHED (${cachedUrls})` },
+    { name: "DEPLOY", status: "VERCEL" },
   ];
 
   const hoveredDay = hovered !== null ? dailyActivity[hovered] : null;
@@ -58,7 +58,10 @@ export function Diagnostics({
   return (
     <TechBorder className="p-6 md:p-5">
       {/* Title */}
-      <h2 className="text-xs font-vt323 text-pink-400 mb-4 flex items-center gap-2 tracking-widest">
+      <h2
+        className="text-xs font-vt323 mb-4 flex items-center gap-2 tracking-widest"
+        style={{ color: 'var(--text-panel-title)' }}
+      >
         <img
           src="https://unpkg.com/pixelarticons@1.8.1/svg/chart.svg"
           className="pa-icon w-4 h-4 inline-block"
@@ -70,19 +73,31 @@ export function Diagnostics({
 
       {/* Stat boxes */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
-        <div className="bg-pink-950/10 p-4 text-center">
-          <div className="text-[10px] text-gray-400 uppercase mb-1.5">
+        <div className="p-4 text-center" style={{ background: 'var(--bg-surface)' }}>
+          <div
+            className="text-[10px] uppercase mb-1.5"
+            style={{ color: 'var(--text-muted)' }}
+          >
             This Week
           </div>
-          <div className="text-xl font-bold font-vt323 text-pink-300">
+          <div
+            className="text-xl font-bold font-vt323"
+            style={{ color: 'var(--text-value)' }}
+          >
             {thisWeekCount}
           </div>
         </div>
-        <div className="bg-pink-950/10 p-4 text-center">
-          <div className="text-[10px] text-gray-400 uppercase mb-1.5">
+        <div className="p-4 text-center" style={{ background: 'var(--bg-surface)' }}>
+          <div
+            className="text-[10px] uppercase mb-1.5"
+            style={{ color: 'var(--text-muted)' }}
+          >
             This Month
           </div>
-          <div className="text-xl font-bold font-vt323 text-pink-300">
+          <div
+            className="text-xl font-bold font-vt323"
+            style={{ color: 'var(--text-value)' }}
+          >
             {thisMonthCount}
           </div>
         </div>
@@ -90,7 +105,8 @@ export function Diagnostics({
 
       {/* Publishing frequency bars — interactive */}
       <div
-        className="relative h-24 bg-black/20 overflow-hidden flex items-end gap-[2px] p-[1px] mb-5"
+        className="relative h-24 overflow-hidden flex items-end gap-[2px] p-[1px] mb-5"
+        style={{ background: 'var(--bg-bar-area)' }}
         onMouseLeave={() => setHovered(null)}
       >
         {dailyActivity.map((day, i) => (
@@ -101,16 +117,19 @@ export function Diagnostics({
               height: `${day.count > 0 ? Math.max(20, day.count * 33) : 5}%`,
               minWidth: "4px",
               background: hovered === i
-                ? "rgba(236,72,153,0.95)"
+                ? "var(--bar-hovered)"
                 : hovered !== null
-                  ? day.count > 0 ? "rgba(236,72,153,0.3)" : "rgba(236,72,153,0.05)"
-                  : day.count > 0 ? "rgba(236,72,153,0.7)" : "rgba(236,72,153,0.1)",
+                  ? day.count > 0 ? "var(--bar-dimmed)" : "var(--bar-dimmed-inactive)"
+                  : day.count > 0 ? "var(--bar-active)" : "var(--bar-inactive)",
               imageRendering: "pixelated" as const,
             }}
             onMouseEnter={() => setHovered(i)}
           />
         ))}
-        <div className="absolute top-1 left-1 text-[8px] font-tech text-pink-600 pointer-events-none">
+        <div
+          className="absolute top-1 left-1 text-[8px] font-tech pointer-events-none"
+          style={{ color: 'var(--bar-label)' }}
+        >
           {hoveredDay
             ? `${formatDate(hoveredDay.date)} · ${hoveredDay.count} ${hoveredDay.count === 1 ? "entry" : "entries"}`
             : "PUBLISHING FREQUENCY"}
@@ -118,14 +137,18 @@ export function Diagnostics({
       </div>
 
       {/* Service status list */}
-      <div className="mt-5 space-y-4 font-tech text-[10px] text-pink-300/70">
+      <div
+        className="mt-5 space-y-4 font-tech text-[10px]"
+        style={{ color: 'var(--text-accent-soft)' }}
+      >
         {services.map((svc) => (
           <div
             key={svc.name}
-            className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-0.5 sm:gap-0 py-1.5 sm:py-0 border-b border-pink-500/10 sm:border-0 last:border-0"
+            className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-0.5 sm:gap-0 py-1.5 sm:py-0 border-b sm:border-0 last:border-0"
+            style={{ borderColor: 'var(--border-subtle)' }}
           >
             <span>&gt; {svc.name}</span>
-            <span className={svc.color}>{svc.status}</span>
+            <span style={{ color: 'var(--text-status)' }}>{svc.status}</span>
           </div>
         ))}
       </div>

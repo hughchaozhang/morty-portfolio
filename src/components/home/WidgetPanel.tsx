@@ -35,13 +35,13 @@ type Tab = "weekly" | "stack";
 /* ------------------------------------------------------------------ */
 
 const modules = [
-  { name: "Next.js 16", status: "SSG", statusColor: "text-green-400", base: 100 },
-  { name: "Tailwind v4", status: "LOADED", statusColor: "text-green-400", base: 100 },
-  { name: "Markdown Pipeline", status: "ACTIVE", statusColor: "text-green-400", base: 100 },
-  { name: "Link Preview (OG)", status: "CACHED", statusColor: "text-green-400", base: 92 },
-  { name: "Geist Pixel", status: "LOADED", statusColor: "text-green-400", base: 100 },
-  { name: "Pretext", status: "READY", statusColor: "text-yellow-400", base: 65 },
-  { name: "Vercel Deploy", status: "CONNECTED", statusColor: "text-green-400", base: 100 },
+  { name: "Next.js 16", status: "SSG", statusVar: "var(--text-status)", base: 100 },
+  { name: "Tailwind v4", status: "LOADED", statusVar: "var(--text-status)", base: 100 },
+  { name: "Markdown Pipeline", status: "ACTIVE", statusVar: "var(--text-status)", base: 100 },
+  { name: "Link Preview (OG)", status: "CACHED", statusVar: "var(--text-status)", base: 92 },
+  { name: "Geist Pixel", status: "LOADED", statusVar: "var(--text-status)", base: 100 },
+  { name: "Pretext", status: "READY", statusVar: "var(--text-status-ready)", base: 65 },
+  { name: "Vercel Deploy", status: "CONNECTED", statusVar: "var(--text-status)", base: 100 },
 ] as const;
 
 /* ------------------------------------------------------------------ */
@@ -90,21 +90,23 @@ export function WidgetPanel({ weeklyEntries }: WidgetPanelProps) {
         <div className="flex gap-1">
           <button
             onClick={() => setTab("weekly")}
-            className={`px-2 py-1 text-[10px] font-vt323 tracking-widest transition-colors ${
+            className="px-2 py-1 text-[10px] font-vt323 tracking-widest transition-colors border border-transparent"
+            style={
               tab === "weekly"
-                ? "text-pink-300 bg-pink-500/15 border border-pink-500/30"
-                : "text-gray-500 hover:text-gray-300 border border-transparent"
-            }`}
+                ? { color: 'var(--text-tab-active)', background: 'var(--bg-tab-active)', border: '1px solid var(--border-tab-active)' }
+                : { color: 'var(--text-tab-inactive)' }
+            }
           >
             WEEKLY
           </button>
           <button
             onClick={() => setTab("stack")}
-            className={`px-2 py-1 text-[10px] font-vt323 tracking-widest transition-colors ${
+            className="px-2 py-1 text-[10px] font-vt323 tracking-widest transition-colors border border-transparent"
+            style={
               tab === "stack"
-                ? "text-pink-300 bg-pink-500/15 border border-pink-500/30"
-                : "text-gray-500 hover:text-gray-300 border border-transparent"
-            }`}
+                ? { color: 'var(--text-tab-active)', background: 'var(--bg-tab-active)', border: '1px solid var(--border-tab-active)' }
+                : { color: 'var(--text-tab-inactive)' }
+            }
           >
             STACK
           </button>
@@ -126,24 +128,39 @@ export function WidgetPanel({ weeklyEntries }: WidgetPanelProps) {
             <Link
               key={entry.slug}
               href={`/weekly/${entry.slug}`}
-              className="group flex gap-3 p-2 transition-all hover:bg-glass-bg border border-transparent hover:border-glass-border"
+              className="group flex gap-3 p-2 transition-all border border-transparent"
             >
               {entry.cover ? (
-                <div className="w-16 h-12 shrink-0 overflow-hidden border border-pink-500/15">
+                <div
+                  className="w-16 h-12 shrink-0 overflow-hidden border"
+                  style={{ borderColor: 'var(--border-cover)' }}
+                >
                   <CoverImage src={entry.cover} />
                 </div>
               ) : (
-                <div className="w-16 h-12 shrink-0 bg-pink-950/20 border border-pink-500/10" />
+                <div
+                  className="w-16 h-12 shrink-0 border"
+                  style={{ background: 'var(--bg-placeholder)', borderColor: 'var(--border-subtle)' }}
+                />
               )}
               <div className="flex-1 min-w-0">
-                <h3 className="text-xs font-vt323 text-pink-200 group-hover:text-white transition-colors truncate">
+                <h3
+                  className="text-xs font-vt323 transition-colors truncate"
+                  style={{ color: 'var(--text-card-title)' }}
+                >
                   {entry.title}
                 </h3>
-                <time className="text-[9px] font-vt323 text-gray-500 tracking-wider">
+                <time
+                  className="text-[9px] font-vt323 tracking-wider"
+                  style={{ color: 'var(--text-dim)' }}
+                >
                   {entry.date}
                 </time>
                 {entry.summary && (
-                  <p className="text-[9px] text-gray-500 line-clamp-1 mt-0.5">
+                  <p
+                    className="text-[9px] line-clamp-1 mt-0.5"
+                    style={{ color: 'var(--text-dim)' }}
+                  >
                     {entry.summary}
                   </p>
                 )}
@@ -159,10 +176,13 @@ export function WidgetPanel({ weeklyEntries }: WidgetPanelProps) {
           {modules.map((mod, i) => (
             <div key={mod.name} className="group cursor-pointer">
               <div className="flex items-center justify-between mb-1">
-                <span className="text-sm font-vt323 group-hover:text-pink-300 transition-colors">
+                <span className="text-sm font-vt323 transition-colors">
                   {mod.name}
                 </span>
-                <span className={`text-[10px] font-tech ${mod.statusColor}`}>
+                <span
+                  className="text-[10px] font-tech"
+                  style={{ color: mod.statusVar }}
+                >
                   {mod.status}
                 </span>
               </div>

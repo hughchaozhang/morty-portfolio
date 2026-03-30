@@ -51,7 +51,7 @@ export function TypeWriter({ sayings }: { sayings: string[] }) {
   }, [sayings]);
 
   return (
-    <div className="mt-6 p-3 bg-pink-950/20 text-xs text-pink-200 font-vt323">
+    <div className="mt-6 p-3 text-xs font-vt323" style={{ background: 'var(--bg-surface)', color: 'var(--text-value)' }}>
       <span>{text}</span>
       <span className="quote-cursor">|</span>
     </div>

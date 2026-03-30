@@ -310,7 +310,8 @@ export function Terminal({ stats }: TerminalProps) {
       {/* Toggle button */}
       <button
         type="button"
-        className="absolute top-2 right-2 md:right-4 p-2 md:p-1 min-w-[44px] min-h-[44px] md:min-w-0 md:min-h-0 flex items-center justify-center text-pink-500 hover:text-pink-300 transition-colors z-10 -translate-y-1"
+        className="absolute top-2 right-2 md:right-4 p-2 md:p-1 min-w-[44px] min-h-[44px] md:min-w-0 md:min-h-0 flex items-center justify-center transition-colors z-10 -translate-y-1"
+        style={{ color: 'var(--text-accent)' }}
         title="Expand / Collapse"
         aria-label="Toggle session panel"
         onClick={() => setExpanded((e) => !e)}
@@ -360,7 +361,8 @@ export function Terminal({ stats }: TerminalProps) {
           <input
             ref={inputRef}
             type="text"
-            className="flex-1 bg-transparent text-pink-100 font-vt323 text-sm py-3 px-2 focus:outline-none placeholder-pink-900/40"
+            className="flex-1 bg-transparent font-vt323 text-sm py-3 px-2 focus:outline-none"
+            style={{ color: 'var(--text-input)' }}
             placeholder={busy ? "Friday is thinking..." : "type /help or talk to Friday"}
             autoComplete="off"
             disabled={busy}
@@ -370,7 +372,8 @@ export function Terminal({ stats }: TerminalProps) {
           />
           <button
             type="button"
-            className="px-3 py-3 text-pink-500/50 hover:text-pink-300 transition-colors shrink-0 disabled:opacity-30"
+            className="px-3 py-3 transition-colors shrink-0 disabled:opacity-30"
+            style={{ color: 'var(--text-accent-muted)' }}
             title="Send"
             aria-label="Send"
             disabled={busy}
