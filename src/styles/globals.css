@@ -242,25 +242,25 @@ body {
   background: linear-gradient(
     90deg,
     rgba(236, 72, 153, 0.4) 0%,
-    rgba(236, 72, 153, 0.4) 40%,
-    rgba(236, 72, 153, 0.9) 48%,
+    rgba(236, 72, 153, 0.4) 35%,
+    rgba(236, 72, 153, 0.9) 45%,
     rgba(255, 200, 230, 1) 50%,
-    rgba(236, 72, 153, 0.9) 52%,
-    rgba(236, 72, 153, 0.4) 60%,
+    rgba(236, 72, 153, 0.9) 55%,
+    rgba(236, 72, 153, 0.4) 65%,
     rgba(236, 72, 153, 0.4) 100%
   );
-  background-size: 500% 100%;
+  background-size: 300% 100%;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: neon-sweep 4s linear infinite;
+  animation: neon-sweep 4s ease-in-out infinite;
   text-shadow: none;
 }
 
 @keyframes neon-sweep {
-  0%   { background-position: 200% 0; }
-  30%  { background-position: -200% 0; }
-  100% { background-position: -200% 0; }
+  0%   { background-position: 100% 0; }
+  30%  { background-position: 0% 0; }
+  100% { background-position: 0% 0; }
 }
 
 .arc-ring {
