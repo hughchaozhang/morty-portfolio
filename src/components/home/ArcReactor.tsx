@@ -1,14 +1,15 @@
 /**
- * [INPUT]:  react hooks, diary fragments, MatrixRain
- * [OUTPUT]: ArcReactor — video core, rings, crosshair, uptime, matrix rain wrapping around circle
+ * [INPUT]:  react hooks, diary fragments, MatrixRain with circle measurement
+ * [OUTPUT]: ArcReactor — video core, rings, crosshair, uptime, Pretext-powered matrix rain
  * [POS]:    home/ center-column visual centerpiece
  * [PROTOCOL]: update this header on change, then check CLAUDE.md
  */
 
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { MatrixRain } from "./MatrixRain";
+import type { CircleInfo } from "./MatrixRain";
 
 /* ------------------------------------------------------------------ */
 /*  Constants                                                          */
@@ -42,6 +43,9 @@ function formatUptime(start: Date): string {
 export default function ArcReactor({ fragments = [] }: { fragments?: string[] }) {
   const [status, setStatus] = useState<string>("");
   const [uptime, setUptime] = useState<string>("--");
+  const [circle, setCircle] = useState<CircleInfo | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     setStatus(pickRandom(STATUSES));
@@ -51,16 +55,43 @@ export default function ArcReactor({ fragments = [] }: { fragments?: string[] })
     return () => clearInterval(id);
   }, []);
 
+  // measure the video circle position relative to container
+  const measureCircle = useCallback(() => {
+    const container = containerRef.current;
+    const video = videoRef.current;
+    if (!container || !video) return;
+
+    const cRect = container.getBoundingClientRect();
+    const vRect = video.getBoundingClientRect();
+
+    setCircle({
+      cx: vRect.left - cRect.left + vRect.width / 2,
+      cy: vRect.top - cRect.top + vRect.height / 2,
+      r: vRect.width / 2,
+    });
+  }, []);
+
+  useEffect(() => {
+    measureCircle();
+    window.addEventListener("resize", measureCircle);
+    // re-measure after a short delay to catch layout shifts
+    const timer = setTimeout(measureCircle, 500);
+    return () => {
+      window.removeEventListener("resize", measureCircle);
+      clearTimeout(timer);
+    };
+  }, [measureCircle]);
+
   return (
-    <div className="flex-1 relative flex items-center justify-center">
+    <div ref={containerRef} className="flex-1 relative flex items-center justify-center">
       {/* ---- crosshair grid ---- */}
       <div className="absolute inset-0 border border-pink-500/15 pointer-events-none">
         <div className="absolute top-0 left-1/2 w-px h-full bg-gradient-to-b from-transparent via-pink-500/20 to-transparent" />
         <div className="absolute top-1/2 left-0 w-full h-px bg-gradient-to-r from-transparent via-pink-500/20 to-transparent" />
       </div>
 
-      {/* ---- matrix rain — text flows around the circle ---- */}
-      {fragments.length > 0 && <MatrixRain fragments={fragments} />}
+      {/* ---- matrix rain — Pretext-powered text flow around circle ---- */}
+      {fragments.length > 0 && <MatrixRain fragments={fragments} circle={circle} />}
 
       {/* ---- reactor core ---- */}
       <div className="arc-reactor relative z-10">
@@ -69,6 +100,7 @@ export default function ArcReactor({ fragments = [] }: { fragments?: string[] })
         <div className="arc-ring arc-ring-5" />
 
         <video
+          ref={videoRef}
           src="/core.mp4"
           autoPlay
           loop
