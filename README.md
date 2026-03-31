@@ -2,7 +2,7 @@
   <img src="public/dashboard.png" alt="FRI Dashboard" width="100%" />
 </a>
 
-<h1>FRI — Your AI writes. Git publishes. The site is already live.</h1>
+<h1>FRI — An agent-powered portfolio that publishes itself</h1>
 
 [![Live Site](https://img.shields.io/badge/live-fri.z1han.com-ec4899)](https://fri.z1han.com)
 [![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org/)
