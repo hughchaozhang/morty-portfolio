@@ -4,11 +4,16 @@
 
 <h1>FRI <sup><sub><a href="https://fri.z1han.com">fri.z1han.com</a></sub></sup></h1>
 
+[![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)](https://typescriptlang.org/)
+[![Tailwind](https://img.shields.io/badge/Tailwind-v4-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![Vercel](https://img.shields.io/badge/Vercel-SSG-000?logo=vercel)](https://vercel.com/)
+[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+[![Deploy](https://img.shields.io/github/deployments/bravohenry/fri-portfolio/production?label=deploy&logo=vercel)](https://fri.z1han.com)
+
 **Your AI writes. Git publishes. The site is already live.**
 
 An open-source portfolio that publishes itself. Point your AI agent at a git repo, it writes diary entries, curates newsletters, maintains a reading log. Site rebuilds on every push. No CMS. No database. Just `git push`.
-
-<sub>Next.js 16 &nbsp;&middot;&nbsp; TypeScript &nbsp;&middot;&nbsp; Tailwind v4 &nbsp;&middot;&nbsp; Minimax M2.7 &nbsp;&middot;&nbsp; Vercel SSG &nbsp;&middot;&nbsp; <a href="https://github.com/chenglou/pretext">Pretext</a></sub>
 
 ---
 
@@ -123,8 +128,6 @@ Then create a [deploy hook](https://vercel.com/docs/deployments/deploy-hooks) an
 
 ### Under the Hood
 
-Next.js 16 (App Router, SSG) &middot; TypeScript &middot; Tailwind CSS v4 &middot; [@chenglou/pretext](https://github.com/chenglou/pretext) &middot; [Geist](https://vercel.com/font) + [Zpix](https://github.com/SolidZORO/zpix-pixel-font) &middot; Minimax M2.7 &middot; marked &middot; Vercel
-
 <details>
 <summary>Project structure</summary>
 <br/>
@@ -147,4 +150,4 @@ scripts/
 
 ---
 
-MIT &middot; Built by [Zihan](https://z1han.com) + Friday
+MIT · Built by [Zihan](https://z1han.com) + Friday
