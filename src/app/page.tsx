@@ -1,12 +1,13 @@
 /**
- * [INPUT]:  All home components, lib/stats for real metrics
- * [OUTPUT]: Viewport-locked 3-column dashboard homepage with live data
- * [POS]:    Root page — assembles the FRI interface grid. Viewport lock lives HERE,
+ * [INPUT]:  All home components, lib/stats for real metrics, latest daily briefing content
+ * [OUTPUT]: Viewport-locked homepage with a top briefing strip above the 3-column dashboard grid
+ * [POS]:    Root page — assembles the FRI interface. Viewport lock lives HERE,
  *           not in layout.tsx, so content pages can scroll normally.
  * [PROTOCOL]: Update this header on any layout change, then check CLAUDE.md
  */
 
 import { SystemHeader } from "@/components/home/SystemHeader";
+import { MorningBriefing } from "@/components/home/MorningBriefing";
 import { IdentityMatrix } from "@/components/home/IdentityMatrix";
 import { WidgetPanel } from "@/components/home/WidgetPanel";
 import ArcReactor from "@/components/home/ArcReactor";
@@ -20,6 +21,7 @@ export default async function Home() {
   const stats = getSiteStats();
   const weeklyEntries = await getEntries("weekly");
   const dailyEntries = await getEntries("daily");
+  const latestBriefing = dailyEntries[0] ?? null;
   const diaryFragments = getDiaryFragments();
 
   return (
@@ -33,7 +35,12 @@ export default async function Home() {
         daysSinceLaunch={stats.daysSinceLaunch}
       />
 
-      <main className="flex-1 min-h-0 flex flex-col p-4 md:p-6 pb-4 md:pb-6 relative z-10 overflow-y-auto md:overflow-hidden">
+      <main className="flex-1 min-h-0 flex flex-col gap-6 p-4 md:p-6 pb-4 md:pb-6 relative z-10 overflow-y-auto md:overflow-hidden">
+        <MorningBriefing
+          entry={latestBriefing}
+          totalBriefings={dailyEntries.length}
+        />
+
         <div className="flex-1 min-h-0 grid grid-cols-1 md:grid-cols-12 grid-rows-auto md:grid-rows-[1fr] gap-6 overflow-visible md:overflow-hidden mobile-column-layout">
 
           <div className="col-span-12 md:col-span-3 flex flex-col gap-6 min-h-0 order-2 md:order-1">
