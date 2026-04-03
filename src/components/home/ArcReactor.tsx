@@ -55,7 +55,6 @@ export default function ArcReactor({ fragments = [] }: { fragments?: string[] })
     return () => clearInterval(id);
   }, []);
 
-  // measure the video circle position relative to container
   const measureCircle = useCallback(() => {
     const container = containerRef.current;
     const video = videoRef.current;
@@ -74,7 +73,6 @@ export default function ArcReactor({ fragments = [] }: { fragments?: string[] })
   useEffect(() => {
     measureCircle();
     window.addEventListener("resize", measureCircle);
-    // re-measure after a short delay to catch layout shifts
     const timer = setTimeout(measureCircle, 500);
     return () => {
       window.removeEventListener("resize", measureCircle);
@@ -84,16 +82,13 @@ export default function ArcReactor({ fragments = [] }: { fragments?: string[] })
 
   return (
     <div ref={containerRef} className="flex-1 relative flex items-center justify-center">
-      {/* ---- crosshair grid ---- */}
-      <div className="absolute inset-0 border pointer-events-none" style={{ borderColor: 'var(--border-crosshair)' }}>
-        <div className="absolute top-0 left-1/2 w-px h-full" style={{ background: 'linear-gradient(to bottom, transparent, var(--crosshair-via), transparent)' }} />
-        <div className="absolute top-1/2 left-0 w-full h-px" style={{ background: 'linear-gradient(to right, transparent, var(--crosshair-via), transparent)' }} />
+      <div className="absolute inset-0 border pointer-events-none" style={{ borderColor: "var(--border-crosshair)" }}>
+        <div className="absolute top-0 left-1/2 w-px h-full" style={{ background: "linear-gradient(to bottom, transparent, var(--crosshair-via), transparent)" }} />
+        <div className="absolute top-1/2 left-0 w-full h-px" style={{ background: "linear-gradient(to right, transparent, var(--crosshair-via), transparent)" }} />
       </div>
 
-      {/* ---- matrix rain — Pretext-powered text flow around circle ---- */}
       {fragments.length > 0 && <MatrixRain fragments={fragments} circle={circle} />}
 
-      {/* ---- reactor core ---- */}
       <div className="arc-reactor relative z-10">
         <div className="arc-ring arc-ring-3" />
         <div className="arc-ring arc-ring-4" />
@@ -107,20 +102,23 @@ export default function ArcReactor({ fragments = [] }: { fragments?: string[] })
           muted
           playsInline
           className="arc-video w-48 h-48 sm:w-56 sm:h-56 md:w-72 md:h-72 object-cover border-2"
-          style={{ borderColor: 'var(--border-video)' }}
+          style={{ borderColor: "var(--border-video)" }}
         />
 
         <div className="absolute -bottom-10 md:-bottom-12 text-center">
           <div className="text-[10px] md:text-xs font-tech tracking-widest neon-shimmer">
-            {status || "FRI CORE"}
+            {status || "MORTY CORE"}
           </div>
         </div>
       </div>
 
-      {/* ---- cumulative runtime ---- */}
       <div className="absolute top-4 right-4 md:top-10 md:right-10 text-right z-10">
-        <div className="text-[10px] font-tech mb-1" style={{ color: 'var(--text-accent)' }}>Cumulative runtime</div>
-        <div className="text-sm font-vt323" style={{ color: 'var(--text-value)' }}>{uptime}</div>
+        <div className="text-[10px] font-tech mb-1" style={{ color: "var(--text-accent)" }}>
+          Cumulative runtime
+        </div>
+        <div className="text-sm font-vt323" style={{ color: "var(--text-value)" }}>
+          {uptime}
+        </div>
       </div>
     </div>
   );

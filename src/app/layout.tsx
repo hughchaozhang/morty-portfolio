@@ -12,8 +12,8 @@ import { GeistPixelSquare } from "geist/font/pixel";
 import "@/styles/globals.css";
 
 export const metadata: Metadata = {
-  title: "FRI Interface v3.28",
-  description: "Intelligent Assistant — Portfolio Shell for Friday",
+  title: "Morty Interface",
+  description: "Morning briefings, dispatches, and build notes from Hugh Zhang's operator layer.",
   icons: { icon: "/favicon.png" },
 };
 
@@ -25,7 +25,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable} ${GeistPixelSquare.variable}`} suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: `try{var t=localStorage.getItem('fri-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}` }} />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{var t=localStorage.getItem('morty-theme')||localStorage.getItem('fri-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}`,
+          }}
+        />
       </head>
       <body className="font-suse">{children}</body>
     </html>

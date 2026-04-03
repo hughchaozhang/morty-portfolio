@@ -14,8 +14,8 @@ export default async function DailyPage() {
     <EntryList
       entries={entries}
       type="daily"
-      title="AI Builders Digest"
-      subtitle="Daily briefing from the frontier. Curated by agents, reviewed by humans."
+      title="Morning Briefings"
+      subtitle="Public daily dispatches from Morty — compact signal, sharp synthesis, and the next move worth paying attention to."
     />
   );
 }

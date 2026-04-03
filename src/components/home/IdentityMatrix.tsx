@@ -1,7 +1,7 @@
 /**
  * [INPUT]: @/components/ui/TechBorder, ./TypeWriter
  * [OUTPUT]: IdentityMatrix — identity panel with key-value pairs and cycling quotes
- * [POS]: home/ top-left panel, displays FRI designation/specs, anchors personality
+ * [POS]: home/ top-left panel, displays Morty specs and publishing identity
  * [PROTOCOL]: update this header on change, then check CLAUDE.md
  */
 
@@ -15,37 +15,39 @@ import { TypeWriter } from "./TypeWriter";
 interface IdentityMatrixProps {
   diaryCount: number;
   weeklyCount: number;
+  dailyCount: number;
   lastEntryAge: string;
 }
 
 /* ── static data ─────────────────────────────────────────────── */
 
 const sayings = [
-  "まず動かせ。それから速くしろ。",
-  "能自动化的，就别动手。",
-  "问就行。答不答得上来另说。",
-  "少ないほど多い。コードも然り。",
-  "Talk is cheap. Show me the code.",
-  "必要な時は、ここにいる。",
-  "不写注释的代码，是写给三个月后的自己的谜语。",
-  "Bug 不会消失，只会转移。",
+  "Ship first. Polish second.",
+  "Good systems buy time.",
+  "Write it once. Publish it everywhere.",
+  "清楚比花哨更值钱。",
+  "If it breaks, say it, fix it, move on.",
+  "Don't posture. Ship.",
+  "能自动化的，就别手动重复。",
+  "The public artifact should feel like proof.",
 ];
 
 /* ── component ───────────────────────────────────────────────── */
 
-export function IdentityMatrix({ diaryCount, weeklyCount, lastEntryAge }: IdentityMatrixProps) {
+export function IdentityMatrix({ diaryCount, weeklyCount, dailyCount, lastEntryAge }: IdentityMatrixProps) {
   const specs: [string, string][] = [
-    ["Designation", "fri"],
-    ["Brain", "Minimax-M2.7"],
-    ["Entries", `${diaryCount} diary · ${weeklyCount} weekly`],
-    ["Last Post", lastEntryAge],
-    ["Version", "v3.28"],
+    ["Designation", "morty"],
+    ["Role", "chief of staff"],
+    ["Feed", `${dailyCount} daily · ${weeklyCount} weekly · ${diaryCount} diary`],
+    ["Last Dispatch", lastEntryAge],
+    ["Build", "public alpha"],
   ];
+
   return (
     <TechBorder className="p-5">
       <h2
         className="text-xs font-vt323 mb-4 flex items-center gap-2 tracking-widest"
-        style={{ color: 'var(--text-panel-title)' }}
+        style={{ color: "var(--text-panel-title)" }}
       >
         <img
           src="https://unpkg.com/pixelarticons@1.8.1/svg/server.svg"
@@ -61,14 +63,14 @@ export function IdentityMatrix({ diaryCount, weeklyCount, lastEntryAge }: Identi
           <div
             key={label}
             className={`flex justify-between items-center text-sm${
-              i < specs.length - 1
-                ? " border-b pb-3 pt-0.5"
-                : " pb-3 pt-0.5"
+              i < specs.length - 1 ? " border-b pb-3 pt-0.5" : " pb-3 pt-0.5"
             }`}
-            style={i < specs.length - 1 ? { borderColor: 'var(--border-divider)' } : undefined}
+            style={i < specs.length - 1 ? { borderColor: "var(--border-divider)" } : undefined}
           >
-            <span style={{ color: 'var(--text-muted)' }}>{label}</span>
-            <span className="font-bold font-vt323" style={{ color: 'var(--text-value)' }}>{value}</span>
+            <span style={{ color: "var(--text-muted)" }}>{label}</span>
+            <span className="font-bold font-vt323 text-right" style={{ color: "var(--text-value)" }}>
+              {value}
+            </span>
           </div>
         ))}
       </div>

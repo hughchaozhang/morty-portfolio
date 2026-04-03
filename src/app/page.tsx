@@ -1,8 +1,7 @@
 /**
  * [INPUT]:  All home components, lib/stats for real metrics, latest daily briefing content
- * [OUTPUT]: Viewport-locked homepage with a top briefing strip above the 3-column dashboard grid
- * [POS]:    Root page — assembles the FRI interface. Viewport lock lives HERE,
- *           not in layout.tsx, so content pages can scroll normally.
+ * [OUTPUT]: Scrollable homepage with a top briefing strip above the 3-column dashboard grid
+ * [POS]:    Root page — assembles the Morty interface and allows full-page scroll when content grows
  * [PROTOCOL]: Update this header on any layout change, then check CLAUDE.md
  */
 
@@ -25,7 +24,7 @@ export default async function Home() {
   const diaryFragments = getDiaryFragments();
 
   return (
-    <div className="flex flex-col overflow-auto md:overflow-hidden h-auto md:h-screen w-screen">
+    <div className="min-h-screen w-screen overflow-x-hidden flex flex-col">
       <div className="scanline-overlay" />
       <div className="scanner-bar" />
 
@@ -35,18 +34,15 @@ export default async function Home() {
         daysSinceLaunch={stats.daysSinceLaunch}
       />
 
-      <main className="flex-1 min-h-0 flex flex-col gap-6 p-4 md:p-6 pb-4 md:pb-6 relative z-10 overflow-y-auto md:overflow-hidden">
-        <MorningBriefing
-          entry={latestBriefing}
-          totalBriefings={dailyEntries.length}
-        />
+      <main className="flex-1 flex flex-col gap-6 p-4 md:p-6 pb-8 relative z-10 overflow-visible">
+        <MorningBriefing entry={latestBriefing} totalBriefings={dailyEntries.length} />
 
-        <div className="flex-1 min-h-0 grid grid-cols-1 md:grid-cols-12 grid-rows-auto md:grid-rows-[1fr] gap-6 overflow-visible md:overflow-hidden mobile-column-layout">
-
-          <div className="col-span-12 md:col-span-3 flex flex-col gap-6 min-h-0 order-2 md:order-1">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 overflow-visible mobile-column-layout">
+          <div className="col-span-12 md:col-span-3 flex flex-col gap-6 order-2 md:order-1">
             <IdentityMatrix
               diaryCount={stats.diaryCount}
               weeklyCount={stats.weeklyCount}
+              dailyCount={stats.dailyCount}
               lastEntryAge={stats.lastEntryAge}
             />
             <WidgetPanel
@@ -55,15 +51,12 @@ export default async function Home() {
             />
           </div>
 
-          <div
-            id="session-column"
-            className="col-span-12 md:col-span-6 flex flex-col min-h-0 relative order-1 md:order-2"
-          >
+          <div id="session-column" className="col-span-12 md:col-span-6 flex flex-col relative order-1 md:order-2">
             <ArcReactor fragments={diaryFragments} />
             <Terminal stats={stats} />
           </div>
 
-          <div className="col-span-12 md:col-span-3 flex flex-col gap-6 min-h-0 order-3">
+          <div className="col-span-12 md:col-span-3 flex flex-col gap-6 order-3">
             <Diagnostics
               thisWeekCount={stats.thisWeekCount}
               thisMonthCount={stats.thisMonthCount}
@@ -74,7 +67,6 @@ export default async function Home() {
             />
             <CoreDirectives />
           </div>
-
         </div>
       </main>
     </div>

@@ -1,7 +1,7 @@
 /**
  * [INPUT]: react hooks, SiteStats from @/lib/stats
- * [OUTPUT]: Terminal — expandable panel with real AI chat (Minimax M2.7) + local slash commands
- * [POS]: home/ center-column bottom panel, FRI terminal with live AI + site navigation
+ * [OUTPUT]: Terminal — expandable panel with real AI chat + local slash commands
+ * [POS]: home/ center-column bottom panel, Morty terminal with live AI + site navigation
  * [PROTOCOL]: update this header on change, then check CLAUDE.md
  */
 
@@ -55,26 +55,26 @@ function getRandomPath(): string {
 
 function buildSlashReplies(s: SiteStats): Record<string, string> {
   return {
-    help: "Commands: /latest, /stats, /random, /about. Or just talk to me.",
-    latest: `Recent: [${s.lastEntryDate}] ${s.lastEntryAge} | See /diary or /weekly for full archive.`,
+    help: "Commands: /latest, /daily, /weekly, /diary, /stats, /random, /about.",
+    latest: `Latest dispatch: [${s.lastEntryDate}] ${s.lastEntryAge} | Open /daily for the public briefing feed.`,
     stats: `${s.totalEntries} entries. ${formatWords(s.totalWords)} words. ${s.daysSinceLaunch} days online. ${s.thisWeekCount} posts this week.`,
-    about: "FRI — a portfolio and content platform. Diary (Chinese, personal). Weekly (English, design engineering). Built with Next.js, deployed on Vercel.",
+    about: "Morty — Hugh Zhang's operator layer. Morning briefings, weekly dispatches, and selected notes from the build log.",
     status: `${s.totalEntries} entries indexed. ${s.cachedUrls} link previews cached. Deploy: Vercel. All systems nominal.`,
   };
 }
 
 function buildInitialLines(s: SiteStats): Line[] {
   return [
-    { type: "meta", text: "# FRI system initialized" },
+    { type: "meta", text: "# Morty system initialized" },
     { type: "user", text: "status" },
     {
       type: "output",
-      text: `Friday: All systems nominal. ${s.totalEntries} entries indexed, ${formatWords(s.totalWords)} words processed. Uptime: ${s.daysSinceLaunch} days.`,
+      text: `Morty: All systems nominal. ${s.totalEntries} entries indexed, ${formatWords(s.totalWords)} words processed. Uptime: ${s.daysSinceLaunch} days.`,
     },
     { type: "user", text: "help" },
     {
       type: "output",
-      text: "Friday: /latest — recent entries | /stats — site metrics | /random — surprise me | Or just talk to me.",
+      text: "Morty: /latest — recent briefing | /stats — site metrics | /random — surprise me | Or just talk to me.",
     },
   ];
 }
@@ -130,7 +130,6 @@ export function Terminal({ stats }: TerminalProps) {
   const historyRef = useRef<ChatMessage[]>([]);
   const abortRef = useRef<AbortController | null>(null);
 
-  /* Auto-scroll to bottom on new content */
   const scrollToBottom = useCallback(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
@@ -139,12 +138,12 @@ export function Terminal({ stats }: TerminalProps) {
 
   useEffect(scrollToBottom, [lines, streamingText, scrollToBottom]);
 
-  /* Cleanup on unmount */
   useEffect(() => {
-    return () => { abortRef.current?.abort(); };
+    return () => {
+      abortRef.current?.abort();
+    };
   }, []);
 
-  /* ---- Local slash command handler ---- */
   const handleSlash = useCallback(
     (text: string): boolean => {
       const cmd = text.slice(1).split(/\s/)[0].toLowerCase();
@@ -154,21 +153,24 @@ export function Terminal({ stats }: TerminalProps) {
 
       if (cmd === "random") {
         const path = getRandomPath();
-        reply = `Friday: Navigating to ${path}...`;
+        reply = `Morty: Navigating to ${path}...`;
         navigateTo = path;
       } else if (cmd === "latest") {
-        reply = "Friday: " + slashReplies.latest;
-        navigateTo = "/weekly";
+        reply = "Morty: " + slashReplies.latest;
+        navigateTo = "/daily";
+      } else if (cmd === "daily") {
+        reply = "Morty: Opening briefing archive...";
+        navigateTo = "/daily";
       } else if (cmd === "diary") {
-        reply = "Friday: Opening diary...";
+        reply = "Morty: Opening diary...";
         navigateTo = "/diary";
       } else if (cmd === "weekly") {
-        reply = "Friday: Opening weekly archive...";
+        reply = "Morty: Opening weekly archive...";
         navigateTo = "/weekly";
       } else if (slashReplies[cmd]) {
-        reply = "Friday: " + slashReplies[cmd];
+        reply = "Morty: " + slashReplies[cmd];
       } else {
-        return false; // not a known slash command — send to AI
+        return false;
       }
 
       setLines((prev) => [
@@ -186,61 +188,53 @@ export function Terminal({ stats }: TerminalProps) {
     [slashReplies, router],
   );
 
-  /* ---- AI chat handler ---- */
-  const handleChat = useCallback(
-    async (text: string) => {
-      setBusy(true);
-      setStreamingText("");
+  const handleChat = useCallback(async (text: string) => {
+    setBusy(true);
+    setStreamingText("");
 
-      historyRef.current.push({ role: "user", content: text });
+    historyRef.current.push({ role: "user", content: text });
 
-      const controller = new AbortController();
-      abortRef.current = controller;
+    const controller = new AbortController();
+    abortRef.current = controller;
 
-      try {
-        const res = await fetch("/api/chat", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ messages: historyRef.current }),
-          signal: controller.signal,
-        });
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: historyRef.current }),
+        signal: controller.signal,
+      });
 
-        if (!res.ok) {
-          const errText = await res.text();
-          const fallback = `Friday: [Error ${res.status}] ${errText.slice(0, 100)}`;
-          setStreamingText(null);
-          setLines((prev) => [...prev, { type: "output", text: fallback }]);
-          setBusy(false);
-          return;
-        }
-
-        let full = "";
-        for await (const token of parseSSE(res)) {
-          full += token;
-          setStreamingText("Friday: " + full);
-        }
-
-        const finalText = "Friday: " + (full || "...");
-        historyRef.current.push({ role: "assistant", content: full });
-
+      if (!res.ok) {
+        const errText = await res.text();
+        const fallback = `Morty: [Error ${res.status}] ${errText.slice(0, 100)}`;
         setStreamingText(null);
-        setLines((prev) => [...prev, { type: "output", text: finalText }]);
-      } catch (err: unknown) {
-        if (err instanceof Error && err.name === "AbortError") return;
-        setStreamingText(null);
-        setLines((prev) => [
-          ...prev,
-          { type: "output", text: "Friday: Connection interrupted." },
-        ]);
-      } finally {
+        setLines((prev) => [...prev, { type: "output", text: fallback }]);
         setBusy(false);
-        abortRef.current = null;
+        return;
       }
-    },
-    [],
-  );
 
-  /* ---- Submit handler ---- */
+      let full = "";
+      for await (const token of parseSSE(res)) {
+        full += token;
+        setStreamingText("Morty: " + full);
+      }
+
+      const finalText = "Morty: " + (full || "...");
+      historyRef.current.push({ role: "assistant", content: full });
+
+      setStreamingText(null);
+      setLines((prev) => [...prev, { type: "output", text: finalText }]);
+    } catch (err: unknown) {
+      if (err instanceof Error && err.name === "AbortError") return;
+      setStreamingText(null);
+      setLines((prev) => [...prev, { type: "output", text: "Morty: Connection interrupted." }]);
+    } finally {
+      setBusy(false);
+      abortRef.current = null;
+    }
+  }, []);
+
   const submit = useCallback(() => {
     const text = input.trim();
     if (!text || busy) return;
@@ -248,10 +242,8 @@ export function Terminal({ stats }: TerminalProps) {
     setInput("");
     setLines((prev) => [...prev, { type: "user", text }]);
 
-    // slash commands handled locally
     if (text.startsWith("/") && handleSlash(text)) return;
 
-    // everything else goes to AI
     handleChat(text);
   }, [input, busy, handleSlash, handleChat]);
 
@@ -265,24 +257,18 @@ export function Terminal({ stats }: TerminalProps) {
     [submit],
   );
 
-  /* ---- Render a single line ---- */
   function renderLine(line: Line, i: number) {
     switch (line.type) {
       case "meta":
         return (
-          <div
-            key={i}
-            className="term-meta mb-3 cursor-pointer"
-            onClick={() => setExpanded((e) => !e)}
-          >
+          <div key={i} className="term-meta mb-3 cursor-pointer" onClick={() => setExpanded((e) => !e)}>
             {line.text}
           </div>
         );
       case "user":
         return (
           <div key={i} className="mb-1">
-            <span className="term-prompt-user">zihan@fri:~$</span>{" "}
-            {line.text}
+            <span className="term-prompt-user">visitor@morty:~$</span> {line.text}
           </div>
         );
       case "output":
@@ -299,24 +285,21 @@ export function Terminal({ stats }: TerminalProps) {
   return (
     <div
       id="session-panel"
-      className={`h-1/3 min-h-[200px] md:min-h-0 glass-panel tech-border rounded-t-lg p-4 md:p-6 flex flex-col justify-end mt-4 ${
+      className={`h-1/3 min-h-[200px] glass-panel tech-border rounded-t-lg p-4 md:p-6 flex flex-col justify-end mt-4 ${
         expanded ? "expanded" : ""
       }`}
     >
-      {/* Corner decorations */}
       <div className="corner-bl absolute bottom-0 left-0 w-3 h-3" />
       <div className="corner-br absolute bottom-0 right-0 w-3 h-3" />
 
-      {/* Toggle button */}
       <button
         type="button"
         className="absolute top-2 right-2 md:right-4 p-2 md:p-1 min-w-[44px] min-h-[44px] md:min-w-0 md:min-h-0 flex items-center justify-center transition-colors z-10 -translate-y-1"
-        style={{ color: 'var(--text-accent)' }}
+        style={{ color: "var(--text-accent)" }}
         title="Expand / Collapse"
         aria-label="Toggle session panel"
         onClick={() => setExpanded((e) => !e)}
       >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="https://unpkg.com/pixelarticons@1.8.1/svg/chevron-up.svg"
           className="pa-icon w-5 h-5 session-chevron inline-block"
@@ -325,45 +308,35 @@ export function Terminal({ stats }: TerminalProps) {
         />
       </button>
 
-      {/* Scrollable terminal output */}
-      <div
-        ref={scrollRef}
-        className="flex-1 overflow-y-auto custom-scroll mb-5 md:mb-4 min-h-0"
-      >
+      <div ref={scrollRef} className="flex-1 overflow-y-auto custom-scroll mb-5 md:mb-4 min-h-0">
         <div className="terminal-output font-tech">
           {lines.map(renderLine)}
 
-          {/* Streaming AI response */}
-          {streamingText !== null && (
-            <div className="term-output typewriter mb-2">{streamingText}</div>
-          )}
+          {streamingText !== null && <div className="term-output typewriter mb-2">{streamingText}</div>}
 
-          {/* Idle cursor prompt */}
           {streamingText === null && (
             <div className="mt-2">
-              <span className="term-prompt-fri">fri&gt;</span>{" "}
-              <span className="term-cursor" aria-hidden="true" />
+              <span className="term-prompt-fri">morty&gt;</span> <span className="term-cursor" aria-hidden="true" />
             </div>
           )}
         </div>
       </div>
 
-      {/* Command input */}
       <div className="relative mt-3">
-        {/* label sits on the border line */}
-        <span className="absolute -top-[7px] left-3 px-1.5 text-[9px] font-vt323 tracking-widest z-10" style={{ color: 'var(--text-accent-soft)', background: 'var(--bg-panel)' }}>
+        <span
+          className="absolute -top-[7px] left-3 px-1.5 text-[9px] font-vt323 tracking-widest z-10"
+          style={{ color: "var(--text-accent-soft)", background: "var(--bg-panel)" }}
+        >
           COMMAND INPUT
         </span>
-        <div className="flex items-center transition-colors" style={{ border: '1px solid var(--border-accent)', background: 'var(--bg-input)' }}>
-          <span className="pl-3 text-xs font-vt323 text-neon-coral/50 select-none shrink-0">
-            fri&gt;
-          </span>
+        <div className="flex items-center transition-colors" style={{ border: "1px solid var(--border-accent)", background: "var(--bg-input)" }}>
+          <span className="pl-3 text-xs font-vt323 text-neon-coral/50 select-none shrink-0">morty&gt;</span>
           <input
             ref={inputRef}
             type="text"
             className="flex-1 bg-transparent font-vt323 text-sm py-3 px-2 focus:outline-none"
-            style={{ color: 'var(--text-input)' }}
-            placeholder={busy ? "Friday is thinking..." : "type /help or talk to Friday"}
+            style={{ color: "var(--text-input)" }}
+            placeholder={busy ? "Morty is thinking..." : "type /help or ask Morty anything"}
             autoComplete="off"
             disabled={busy}
             value={input}
@@ -373,7 +346,7 @@ export function Terminal({ stats }: TerminalProps) {
           <button
             type="button"
             className="px-3 py-3 transition-colors shrink-0 disabled:opacity-30"
-            style={{ color: 'var(--text-accent-muted)' }}
+            style={{ color: "var(--text-accent-muted)" }}
             title="Send"
             aria-label="Send"
             disabled={busy}
